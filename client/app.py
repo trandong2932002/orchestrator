@@ -10,7 +10,6 @@ def create_app() -> Flask:
         CELERY=dict(
             broker_url="amqp://172.17.0.2",
             result_backend="redis://172.17.0.3",
-            task_ignore_result=True,
         ),
     )
     app.config.from_prefixed_env()
