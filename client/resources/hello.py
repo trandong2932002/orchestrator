@@ -1,7 +1,9 @@
 from flask.views import MethodView
-from flask import current_app
+
 from flask_smorest import Blueprint
 from celery.result import allow_join_result
+
+from ..tasks import do
 
 blp = Blueprint('Hello', 'hello')
 
@@ -9,7 +11,10 @@ blp = Blueprint('Hello', 'hello')
 @blp.route("/")
 class Hello(MethodView):
     def get(self):
-        result = current_app.extensions['celery'].send_task('orchestrator.do', (1,1))
-        with allow_join_result():
-            print(result.get())
+        # <data> should be money or something like that
+        data = 1
+        #? why dont I call it directly?
+        # now I call it directly
+        do(100)
+        
         return 'Hello'

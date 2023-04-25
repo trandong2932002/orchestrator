@@ -1,5 +1,6 @@
 
 from celery import Celery
+from celery.result import allow_join_result
 app = Celery(broker='amqp://localhost',backend='redis://localhost')
 
 # app.conf.task_routes = {
@@ -22,8 +23,10 @@ app.conf.task_routes = {
     'client.*': {'queue': 'client'},
 }
 
-app.send_task('client.do6',)
-
+result = app.send_task('client.notify_do', (1,2), soft_time_limit=6)
+result.get()
+# with allow_join_result():
+#     result.get()
 
 # celery -A client.make_celery worker -l INFO
 # flask run
